@@ -32,7 +32,7 @@ function Products({ product }) {
           <Button
             variant="outline-primary float-end"
 
-            // disabled={product.countInStock === 0}
+      
           >
             Add To Cart
           </Button>
