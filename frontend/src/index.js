@@ -13,15 +13,19 @@ import './assets/styles/index.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import HomeScreen from './screens/HomeScreen';
-import EachProductScreen from './screens/ProductScreen';
+import ProductScreen from './screens/ProductScreen'
+import EachProductScreen from './screens/EachProductScreen';
 import ErrorScreen from './screens/ErrorScreen'
+import CartScreen from './screens/CartScreen';
 
 const router =createBrowserRouter(
   createRoutesFromElements(
     <Route path ="/" element = {<App />}>
-    <Route index = {true} path ="/" element = {<HomeScreen />}/>
-    <Route path ="/product/:id" element = {<EachProductScreen />}/>
-    <Route path="*" element={<ErrorScreen />} ></Route>
+    <Route  path ="/" element = {<HomeScreen />}/>
+    <Route  index = {true} path ="/products" element = {<ProductScreen />}/>
+    <Route path ="/products/:id" element = {<EachProductScreen />}/>
+    <Route path ="/cart" element = {<CartScreen />}/>
+     <Route path="*" element={<ErrorScreen />} ></Route>
       
     </Route>
   )

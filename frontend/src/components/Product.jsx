@@ -1,13 +1,13 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Ratings from "./Ratings";
+// import Ratings from "./Ratings";
 
 function Products({ product }) {
   // my-3 is margin y axis 3 and padding all around 3 and also rounded
   return (
     <Card className="my-3 p-3 rounded">
-      <Link to={`/product/${product._id}`}>
+      <Link to={`/product/${product.id}`}>
         <Card.Img
           src={product.image}
           variant="top"
@@ -16,7 +16,7 @@ function Products({ product }) {
         />
       </Link>
       <Card.Body>
-        <Link to={`/product/${product._id}`}>
+        <Link to={`/products/${product.id}`}>
           <Card.Title as="div" className="product-title">
             <strong>{product.name}</strong>
           </Card.Title>

@@ -1,40 +1,48 @@
 import  express from 'express'
 const router =express.Router()
-import { getProductById,  getProducts } from '../controllers/productControllers.js'
+import { getProductById,  getProducts, createProduct, updateProduct } from '../controllers/productControllers.js'
 
 
-router.route('/').get(getProducts);
-router.route('/:id').get(getProductById)
+// router.route('/').get(getProducts);
+// router.route('/:id').get(getProductById)
 
-//code before we changed it. because we found better way on web,
-// // show all products
-// router.get("/", async (req, res) => {
-//     const products = await Product.find({})
-//     //   .sort({ name: 1 })
-//     //   .populate("donations")
-//     //   .then((products) => {
-//         res.json(products);
-//       })
-//       .patch((err) => {
-//         console.log(err);
-//         res.status(500).json({ error: "An error occurred" });
-//       });
- 
+router.post('/', async (req, res) => {
+    try {
+      const productId = await createProduct(req.body);
+      res.status(201).json({ id: productId, message: 'Product created successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Get all products
+  router.get('/', async (req, res) => {
+    try {
+      const products = await getProducts();
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Get product by ID
+  router.get('/:id', async (req, res) => {
+    try {
+      const product = await getProductById(req.params.id);
+      res.json(product);
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
+  });
 
-
-
-//display a single product
-
-// router.get("/:id", async (req, res) => {
-//     const product =await Product.findById(req.params.id)
-//     //   .populate("donations")
-//     //   .then((family) => {
-//     //     console.log(family.donations);
-//         res.json(product);
-//       })
-//       .patch((err) => {
-//         console.log("err", err);
-//         res.status(500).json({ error: "An error occurred" });
-//       });
-
-export default router
+  router.put('/', async (req, res) => {
+    try {
+      const productId = await updateProduct(req.body);
+      res.status(201).json({ id: productId, message: 'Product updated successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  
+  export default router;

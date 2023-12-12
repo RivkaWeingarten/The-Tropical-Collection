@@ -14,7 +14,7 @@ function HomeScreen() {
       <Image src='https://thetropicalcollection.com/fruit-dish.jpeg' alt='fruit dish' fluid  className="full-height"></Image>
     </Col>
     <Col xs={12} md={6} lg={6} className="d-flex align-items-center justify-content-center">
-          <div className="transparent-bg p-4">
+          <div className="transparent-bg">
       <ListGroup variant="flush justify-content-start">
         <ListGroup.Item className="transparent-bg text-center">
           <h3 >Fresh Fruits Is Our Only Ingredient</h3>
@@ -26,6 +26,7 @@ function HomeScreen() {
    </ListGroup.Item>
         
         <ListGroup.Item className="transparent-bg text-center">
+            <Link to ='/products'>
             <Button
               className="home-button"
               type="button"
@@ -33,7 +34,7 @@ function HomeScreen() {
             >
               See Our Products
             </Button>
-            
+            </Link>
           </ListGroup.Item>
       </ListGroup>
       </div>
