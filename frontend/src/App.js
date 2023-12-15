@@ -6,11 +6,11 @@ import Footer from "./components/Footer";
 const App = () => {
   return (
     <>
-      <Header />
-      <main className="py-3">
-        <Container>
+      {/* <Header /> */}
+      <main >
+        {/* <Container> */}
       <Outlet/>
-        </Container>
+        {/* </Container> */}
       </main>
       <Footer/>
     </>

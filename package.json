@@ -7,16 +7,20 @@
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
-    "client":"npm start --prefix frontend",
+    "client": "npm start --prefix frontend",
     "dev": "concurrently  \"npm run server\" \"npm run client\""
   },
   "author": "Rivka",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "colors": "^1.4.0",
+    "express": "^4.18.2",
+    "firebase": "^10.7.1",
+    "mongoose": "^8.0.1"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
+    "dotenv": "^16.3.1",
     "nodemon": "^3.0.1"
   }
 }
