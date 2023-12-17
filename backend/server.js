@@ -26,7 +26,7 @@ import connectDB from './config/db.js';
 import cors from 'cors'
 import bodyParser from 'body-parser';
 // Import Firebase setup
-import auth from './config/firebase.js';
+import {auth} from './config/firebase.js';
 
 import router from './routes/productRoutes.js';
 import authRouter from './routes/authRoutes.js';
