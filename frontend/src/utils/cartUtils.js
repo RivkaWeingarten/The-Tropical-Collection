@@ -9,9 +9,9 @@ export const addDecimals = (num) => {
       );
       //if order is over 100 shipping is free else 10$
       state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 10);
-      //tax 15%
+      //tax 8%
       state.taxPrice = addDecimals(
-        Number((0.15 * state.itemsPrice).toFixed(2))
+        Number((0.08 * state.itemsPrice).toFixed(2))
       );
       //total price
       state.totalPrice = (

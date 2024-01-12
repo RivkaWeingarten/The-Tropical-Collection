@@ -8,7 +8,7 @@ import { savePaymentMethod } from "../slices/cartSlice";
 import Header from "../components/Header";
 
 function PaymentScreen() {
-  const [paymentMethod, setPaymentMethod] = useState("PayPal");
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,27 +23,38 @@ function PaymentScreen() {
   }, [shippingAddress, navigate]);
   function submitHandler(e) {
     e.preventDefault();
+    setPaymentMethod(e.target.value);
     dispatch(savePaymentMethod(paymentMethod));
-    navigate("/placeorder");
+    // navigate("/placeorder");
   }
   return (
     <>
-      <Header />
-      <FormContainer>
-        <CheckoutSteps step1 step2 step3 />
-        <h1>Payment Method</h1>
-        <Form onSubmit={submitHandler}>
+      {/* <Header /> */}
+      {/* <FormContainer> */}
+        {/* <CheckoutSteps step1 step2 step3 /> */}
+        {/* <p>Payment Method</p> */}
+        {/* <Form onSubmit={submitHandler}>
           <Form.Group>
-            <Form.Label as="legend">Select Method</Form.Label>
+            <Form.Label as="legend"></Form.Label>
             <Col>
               <Form.Check
                 type="radio"
                 className="my-2"
                 label="PayPal or Credit Card"
                 id="PayPal"
-                name="PaymentMethod"
+                name="paymentMethod"
                 value="PayPal"
-                checked
+              
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              ></Form.Check>
+              <Form.Check
+                type="radio"
+                className="my-2"
+                label="Cash or Venmo"
+                id="cash"
+                name="cash"
+                value="cash"
+              
                 onChange={(e) => setPaymentMethod(e.target.value)}
               ></Form.Check>
             </Col>
@@ -52,7 +63,40 @@ function PaymentScreen() {
             Continue
           </Button>
         </Form>
-      </FormContainer>
+
+
+      </FormContainer> */}
+
+<div>
+      <p>Payment Method</p>
+      <Form>
+        <Form.Group>
+          <Form.Label as="legend">Select a payment method:</Form.Label>
+          <Col>
+            <Form.Check
+              type="radio"
+              label="PayPal or Credit Card"
+              id="PayPal"
+              name="paymentMethod"
+              value="PayPal"
+              checked={paymentMethod === 'PayPal'}
+              onChange={submitHandler}
+            ></Form.Check>
+            <Form.Check
+              type="radio"
+              label="Cash or Venmo"
+              id="cash"
+              name="paymentMethod"
+              value="cash"
+              checked={paymentMethod === 'Cash'}
+              onChange={submitHandler}
+            ></Form.Check>
+          </Col>
+        </Form.Group>
+      </Form>
+     
+      <p>Selected Payment Method: {paymentMethod}</p>
+    </div>
     </>
   );
 }

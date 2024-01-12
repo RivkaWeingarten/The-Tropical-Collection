@@ -17,6 +17,7 @@ function ShippingScreen() {
   const [address, setAddress] = useState({
     address: shippingAddress.address || "",
     city: shippingAddress.city || "",
+    state: shippingAddress.state || "",
     postalCode: shippingAddress.postalCode || "",
     country: shippingAddress.country || "",
   });
@@ -68,7 +69,22 @@ function ShippingScreen() {
               setAddress({ ...address, postalCode: e.target.value })
             }
           ></Form.Control>
+
+
         </Form.Group>
+        <Form.Group controlId="state" className="my-2">
+          <Form.Label>State</Form.Label>
+          <Form.Control
+            name="state"
+            value={address.state}
+            placeholder="Enter State"
+            type="state"
+            onChange={(e) =>
+              setAddress({ ...address, state: e.target.value })
+            }
+          ></Form.Control>
+        </Form.Group>
+        
 
         <Form.Group controlId="country" className="my-2">
           <Form.Label>Country</Form.Label>

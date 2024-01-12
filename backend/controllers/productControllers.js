@@ -12,7 +12,7 @@ const getProducts = asyncHandler(async (req, res) => {
 // //public
 
 const getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params._id);
+  const product = await Product.findById(req.params.id);
 
   if (product) {
     return res.json(product);
@@ -22,7 +22,56 @@ const getProductById = asyncHandler(async (req, res) => {
   }
 });
 
-export { getProductById, getProducts };
+// //Create a products
+// //route POST api/product
+// //private/admin
+
+const createProduct = asyncHandler(async (req, res) => {
+  console.log('hello')
+const product = new Product({
+  name:'Sample name',
+  user:req.user._id,
+  price:0,
+  image:'images/sample.jpg',
+  catagory:'dried fruits',
+  countInStock:0,
+  description:'Sample Description'
+
+})
+
+const createdProduct=await product.save()
+res.status(201).json(createdProduct)
+});
+
+
+// //update a product
+// //route PUT api/products/:id
+// //private admin
+const updateProduct = asyncHandler(async (req, res) => {
+  Product.findByIdAndUpdate(req.params.id, req.body)
+  .then((product) => {
+    res.json(product);
+  })
+  .catch((err) => {
+    console.log("err", err);
+    res.status(500).json({ error: "An error occurred" });
+  });
+});
+
+// //delete a product
+// //route DELETE api/products/:id
+// //private admin
+const deleteProduct = asyncHandler(async (req, res) => {
+  Product.findByIdAndDelete(req.params.id)
+    .then(() => {
+      res.json(" deleted");
+    })
+    .catch((err) => {
+      console.log("err", err);
+      res.status(500).json({ error: "An error occurred" });
+    });
+});
+export {createProduct, getProductById, getProducts, updateProduct, deleteProduct};
 
 //firebase code and it worked for displaying single item and all items
 // models/productModel.js
