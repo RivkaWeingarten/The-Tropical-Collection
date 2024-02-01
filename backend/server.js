@@ -29,6 +29,13 @@ app.use('/api/upload', uploadRoutes)
 
 app.use('/api/clerk', clerkWebhooks);
 
+
+
+app.get('/api/config/paypal', (req, res) => res.send({clientId:
+process.env.PAYPAL_CLIENT_ID}))
+
+const __dirname =path.resolve()
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 if (process.env.NODE_ENV==='production'){
     //set static folder
     app.use(express.static(path.join(__dirname, '/frontend/build')))
@@ -41,13 +48,6 @@ if (process.env.NODE_ENV==='production'){
             })
     
 }
-
-app.get('/api/config/paypal', (req, res) => res.send({clientId:
-process.env.PAYPAL_CLIENT_ID}))
-
-const __dirname =path.resolve()
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
-
 app.use(errorHandler)
 app.use(notFound)
 app.listen(port, ()=> console.log(`Server ${port} is running!`))
