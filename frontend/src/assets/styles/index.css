@@ -27,10 +27,10 @@ main {
 }
 
 .product-title {
-  height: 2.5em; /* Set a fixed height */
-  overflow: hidden; /* Hide overflow content */
-  text-overflow: ellipsis; /* Add ellipsis for long text */
-  white-space: nowrap; /* Prevent wrapping */
+  height: 2.5em; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap;
 }
 
 table td,
@@ -67,8 +67,8 @@ table th {
 }
 .transparent-bg {
   background-color:transparent;
-  border-radius: 10px; /* Add border-radius for rounded corners if desired */
-  width: 100%; /* Take up the full width of the container */
+  border-radius: 10px; 
+  width: 100%; 
   max-width: 500px;
 }
 h3{
