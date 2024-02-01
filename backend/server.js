@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
-import clerkWebhooks from '.routes/clerkWebhooks.js'; // Import the Clerk webhooks router
+import clerkWebhooks from './routes/clerkWebhooks.js'; // Import the Clerk webhooks router
 
 import uploadRoutes from './routes/uploadRoutes.js'
 const port =process.env.PORT||5000;
