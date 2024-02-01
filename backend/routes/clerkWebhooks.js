@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { Webhook, WebhookEvent } from "@clerk/clerk-sdk-node";
+// import { Webhook } from '@clerk/clerk-sdk-node';
+// import clerkClient from '@clerk/clerk-sdk-node';
 import { deleteUser, registerUser } from "../controllers/userController.js";
 
 const router = express.Router();
