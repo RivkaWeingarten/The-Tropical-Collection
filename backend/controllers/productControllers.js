@@ -4,8 +4,17 @@ import Product from "../models/productModel.js";
 // //route GET api/products
 // //public
 const getProducts = asyncHandler(async (req, res) => {
-  const products =  await Product.find({});
-  res.json(products);
+  const pageSize = 8;
+  const page = Number(req.query.pageNumber) || 1;
+  const keyword = req.query.keyword
+    ? { name: { $regex: req.query.keyword, $options: "i" } }
+    : {};
+  const count = await Product.countDocuments({...keyword});
+
+  const products = await Product.find({...keyword})
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 // //fetches a products
 // //route GET api/product/id
@@ -27,35 +36,33 @@ const getProductById = asyncHandler(async (req, res) => {
 // //private/admin
 
 const createProduct = asyncHandler(async (req, res) => {
-  console.log('hello')
-const product = new Product({
-  name:'Sample name',
-  user:req.user._id,
-  price:0,
-  image:'images/sample.jpg',
-  catagory:'dried fruits',
-  countInStock:0,
-  description:'Sample Description'
+  console.log("hello");
+  const product = new Product({
+    name: "Sample name",
+    user: req.user._id,
+    price: 0,
+    image: "images/sample.jpg",
+    catagory: "dried fruits",
+    countInStock: 0,
+    description: "Sample Description",
+  });
 
-})
-
-const createdProduct=await product.save()
-res.status(201).json(createdProduct)
+  const createdProduct = await product.save();
+  res.status(201).json(createdProduct);
 });
-
 
 // //update a product
 // //route PUT api/products/:id
 // //private admin
 const updateProduct = asyncHandler(async (req, res) => {
   Product.findByIdAndUpdate(req.params.id, req.body)
-  .then((product) => {
-    res.json(product);
-  })
-  .catch((err) => {
-    console.log("err", err);
-    res.status(500).json({ error: "An error occurred" });
-  });
+    .then((product) => {
+      res.json(product);
+    })
+    .catch((err) => {
+      console.log("err", err);
+      res.status(500).json({ error: "An error occurred" });
+    });
 });
 
 // //delete a product
@@ -71,7 +78,22 @@ const deleteProduct = asyncHandler(async (req, res) => {
       res.status(500).json({ error: "An error occurred" });
     });
 });
-export {createProduct, getProductById, getProducts, updateProduct, deleteProduct};
+// //get a promotional product
+// //route DELETE api/products/:id
+// //private admin
+const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({name: -1}).limit(3)
+ res.status(200).json(products)
+});
+
+export {
+  createProduct,
+  getProductById,
+  getProducts,
+  updateProduct,
+  deleteProduct,
+  getTopProducts,
+};
 
 //firebase code and it worked for displaying single item and all items
 // models/productModel.js
@@ -86,9 +108,9 @@ export {createProduct, getProductById, getProducts, updateProduct, deleteProduct
 //     ...productData,
 //     // createdAt: serverTimestamp(),
 //     // updatedAt: serverTimestamp()
-   
+
 //   }));
-  
+
 //   console.log(`Data is ${productData}`)
 //   return docRef.id;
 //   // return productData

@@ -33,34 +33,57 @@ const authUser = asyncHandler(async (req, res) => {
 // //Register user
 // //route POST api/users/
 // //public
-const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
-  const userExists = await User.findOne({
-    email: new RegExp(`^${email}$`, "i"),
-  });
-  if (userExists) {
-    res.status(400);
-    throw new Error("User already exists");
-  }
-  const user = await User.create({
-    name,
-    email,
-    password,
-  });
+// const registerUser = asyncHandler(async (req, res) => {
+//   const { name, email, password } = req.body;
+//   const userExists = await User.findOne({
+//     email: new RegExp(`^${email}$`, "i"),
+//   });
+//   if (userExists) {
+//     res.status(400);
+//     throw new Error("User already exists");
+//   }
+//   const user = await User.create({
+//     name,
+//     email,
+//     password,
+//   });
 
-  if (user) {
-    generateToken(res, user._id);
-    res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    });
-  } else {
-    res.status(400);
-    throw new Error("Invalid user data");
+//   if (user) {
+//     generateToken(res, user._id);
+//     res.status(200).json({
+//       _id: user._id,
+//       name: user.name,
+//       email: user.email,
+//       isAdmin: user.isAdmin,
+//     });
+//   } else {
+//     res.status(400);
+//     throw new Error("Invalid user data");
+//   }
+// });
+
+const registerUser=async(id, first_name, last_name, email_addresses) =>{
+ try {
+  const user = await User.findOneAndUpdate(
+    {clerkId:id},
+    {
+   $set:{
+    firstName:first_name,
+    lastName: last_name,
+    email:email_addresses[0].email_address,
+    isAdmin:isAdmin
   }
-});
+ },
+ {usert: true, new:true}
+  )
+  await user.save()
+  return user
+ } catch (error) {
+  res.status(400);
+  throw new Error("Invalid user data");
+ }
+ 
+}
 
 // //Logout user and clear cookie
 // //route POST api/users/logout
@@ -166,35 +189,42 @@ const getUsers = asyncHandler(async (req, res) => {
 // //delete user
 // //route DELETE  api/users/:id
 // //private/admin
-const deleteUser = asyncHandler(async (req, res) => {
-  const user =  await User.findById(req.params.id);
-  if (user) {
-    if (user.isAdmin) {
+// const deleteUser = asyncHandler(async (req, res) => {
+//   const user =  await User.findById(req.params.id);
+//   if (user) {
+//     if (user.isAdmin) {
+//       res.status(400);
+//       throw new Error("Cannot Delete Admin User");
+//     }
+//     await User.deleteOne({ _id: user._id });
+//     res.status(200).json({ message: "User Deleted Successfully" });
+//   } else {
+//     res.status(404);
+//     throw new Error("User not found");
+//   }
+// });
+
+//using clerk
+
+const deleteUser = asyncHandler(async (id) => {
+   const user =  await User.findById({clerkId:id});
+    if (user) {
+     if (user.isAdmin) {
       res.status(400);
-      throw new Error("Cannot Delete Admin User");
+  throw new Error("Cannot Delete Admin User");
+     }
+     await User.deleteOne({ clerkId:id});
+      res.status(200).json({ message: "User Deleted Successfully" });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
     }
-    await User.deleteOne({ _id: user._id });
-    res.status(200).json({ message: "User Deleted Successfully" });
-  } else {
-    res.status(404);
-    throw new Error("User not found");
-  }
-});
+  });
 
 // //update user
 // //route PUT  api/users/:id
 // //private/admin
-// const updateUser = asyncHandler(async (req, res) => {
-//   console.log(` from backend ${req.params.id}`)
-//   User.findByIdAndUpdate(req.params.id, req.body)
-//     .then((user) => {
-//       res.json(user);
-//     })
-//     .catch((err) => {
-//       console.log("err", err);
-//       res.status(500).json({ error: "An error occurred" });
-//     });
-// });
+
 
 
 const updateUser = asyncHandler(async (req, res) => {
