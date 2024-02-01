@@ -29,6 +29,19 @@ app.use('/api/upload', uploadRoutes)
 
 app.use('/api/clerk', clerkWebhooks);
 
+if (process.env.NODE_ENV==='production'){
+    //set static folder
+    app.use(express.static(path.join(__dirname, '/frontend/build')))
+    app.get ('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')))
+
+ } else{
+        app.get('/', (req, res) => {
+            res.send("server running")
+            })
+    
+}
+
 app.get('/api/config/paypal', (req, res) => res.send({clientId:
 process.env.PAYPAL_CLIENT_ID}))
 
