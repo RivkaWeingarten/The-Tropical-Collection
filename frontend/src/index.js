@@ -7,6 +7,8 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+
+import { ClerkProvider } from '@clerk/clerk-react'
 import { Provider } from "react-redux";
 import store from "./store";
 // import 'bootstrap/dist/css/bootstrap.min.css'
@@ -70,16 +72,19 @@ const router = createBrowserRouter(
     </Route>
   )
 );
+const PUBLISHABLE_KEY = process.env.REACT_APP_PUBLISHABLE_KEY
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+        <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
     <Provider store={store}>
       <PayPalScriptProvider deferLoading={true}>
       <RouterProvider router={router} />
       </PayPalScriptProvider>
     </Provider>
+    </ClerkProvider>
   </React.StrictMode>
-);
+); 
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
