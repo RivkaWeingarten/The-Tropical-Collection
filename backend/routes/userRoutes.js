@@ -4,7 +4,7 @@ const router =express.Router()
 
 import {protect, admin} from '../middleware/authMiddleware.js'
 import{
-    authUser,
+    //authUser,
     registerUser,
     logoutUser,
     getUserProfile,
@@ -19,7 +19,7 @@ import{
 router.post('/', registerUser)
 router.get('/', protect, admin, getUsers)
 router.post('/logout', logoutUser)
-router.post('/auth', authUser)
+//router.post('/auth', authUser)
 router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile)
 router.delete('/:id', protect, admin, deleteUser)
 router.get('/:id', protect, admin,  getUserById)

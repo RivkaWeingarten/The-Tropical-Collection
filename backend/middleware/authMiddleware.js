@@ -1,31 +1,49 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "./asyncHandler.js";
 import User from "../models/userModel.js";
-
+import { ClerkExpressRequireAuth } from '@clerk/clerk-sdk-node';
 //protect routes
+// const protect = asyncHandler(async (req, res, next) => {
+//   let token;
+
+//   //read JWT from cookie
+//   token = req.cookies.jwt;
+
+//   if (token) {
+//     try {
+//       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//       console.log(`Decoded Token: ${JSON.stringify(decoded)}`);
+//       req.user = await User.findById(decoded.userId).select("-password");
+
+//       next();
+//     } catch (error) {
+//       console.log(error);
+//       res.status(401);
+//       throw new Error("not authorized, token failed");
+//     }
+//   } else {
+//     res.status(401);
+//     throw new Error("not authorized, no token");
+//   }
+// });
+
 const protect = asyncHandler(async (req, res, next) => {
-  let token;
-
-  //read JWT from cookie
-  token = req.cookies.jwt;
-
-  if (token) {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(`Decoded Token: ${JSON.stringify(decoded)}`);
-      req.user = await User.findById(decoded.userId).select("-password");
-
+      await ClerkExpressRequireAuth()(req, res, next);
+  
+      // Accessing authenticated user information from Clerk
+      const clerkUser = req.auth;
+  
+      // Assuming you have a User model and want to find it in your database
+      req.user = await User.findOne({ clerkId: clerkUser.id }).select;
+  
       next();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(401);
-      throw new Error("not authorized, token failed");
+      throw new Error("Not authorized, token failed");
     }
-  } else {
-    res.status(401);
-    throw new Error("not authorized, no token");
-  }
-});
+  });
 
 //admin middleware
 

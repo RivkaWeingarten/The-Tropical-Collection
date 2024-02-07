@@ -6,29 +6,29 @@ import generateToken from "../utils/generateTokens.js";
 // //Auth user and get token
 // //route POST api/users/login
 // //public
-const authUser = asyncHandler(async (req, res) => {
-  console.log(req.body);
+// const authUser = asyncHandler(async (req, res) => {
+//   console.log(req.body);
 
-  const email = req.body.email;
-  const password = req.body.password;
-  //to make the email case insensitive,
-  let user = await User.findOne({
-    email: new RegExp(`^${email}$`, "i"),
-  });
+//   const email = req.body.email;
+//   const password = req.body.password;
+//   //to make the email case insensitive,
+//   let user = await User.findOne({
+//     email: new RegExp(`^${email}$`, "i"),
+//   });
 
-  if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    });
-  } else {
-    res.status(401);
-    throw new Error("Invalid email or password");
-  }
-});
+//   if (user && (await user.matchPassword(password))) {
+//     generateToken(res, user._id);
+//     res.json({
+//       _id: user._id,
+//       name: user.name,
+//       email: user.email,
+//       isAdmin: user.isAdmin,
+//     });
+//   } else {
+//     res.status(401);
+//     throw new Error("Invalid email or password");
+//   }
+// });
 
 // //Register user
 // //route POST api/users/
@@ -62,28 +62,61 @@ const authUser = asyncHandler(async (req, res) => {
 //   }
 // });
 
-const registerUser=async(id, first_name, last_name, email_addresses) =>{
- try {
-  const user = await User.findOneAndUpdate(
-    {clerkId:id},
-    {
-   $set:{
-    firstName:first_name,
-    lastName: last_name,
-    email:email_addresses[0].email_address,
-    isAdmin:isAdmin
-  }
- },
- {usert: true, new:true}
-  )
-  await user.save()
-  return user
- } catch (error) {
-  res.status(400);
-  throw new Error("Invalid user data");
- }
+// const registerUser=async(id, first_name, last_name, email_addresses) =>{
+//  try {
+//   const user = await User.findOneAndUpdate(
+//     {clerkId:id},
+//     {
+//    $set:{
+//     firstName:first_name,
+//     lastName: last_name,
+//     email:email_addresses[0].email_address,
+  
+//   }
+//  },
+//  {usert: true, new:true}
+//   )
+//   await user.save()
+//   return user
+//  } catch (error) {
+//   res.status(400);
+//   throw new Error("Invalid user data");
+//  }
  
-}
+// }
+
+const registerUser = asyncHandler(async (req, res) => {
+  const { id, first_name, last_name, email_addresses } = req.body;
+
+  try {
+    let user = await User.findOne({ clerkId: id });
+
+    if (!user) {
+      // If the user does not exist in your database, create a new user
+      user = await User.create({
+        clerkId: id,
+        firstName: first_name,
+        lastName: last_name,
+        email: email_addresses[0].email_address,
+      });
+    }
+
+    // Generate and send token
+    generateToken(res, user._id);
+
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
+
 
 // //Logout user and clear cookie
 // //route POST api/users/logout
@@ -93,6 +126,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     expires: new Date(0),
   });
+
   res.status(200).json({ message: "Logged Out Successfully" });
 });
 
@@ -257,7 +291,7 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 export {
-  authUser,
+  //authUser,
   registerUser,
   logoutUser,
   getUserProfile,

@@ -96,7 +96,7 @@
 import { SignIn } from "@clerk/clerk-react";
  
 const LoginScreen = () => (
-  <SignIn path="/login" routing="path" afterSignInUrl= "/products" signUpUrl="/register"  />
+  <SignIn path="/login"  afterSignInUrl= "/products" signUpUrl="/register"  />
 );
  
 export default LoginScreen;
