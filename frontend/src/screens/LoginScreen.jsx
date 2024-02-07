@@ -94,9 +94,17 @@
 
 
 import { SignIn } from "@clerk/clerk-react";
- 
+import Header from "../components/Header";
+import FormContainer from "../components/FormContainer";
+
 const LoginScreen = () => (
+  <>
+  <> <Header /></>
+  <FormContainer>
+
   <SignIn path="/login"  afterSignInUrl= "/products" signUpUrl="/register"  />
+  </FormContainer>
+  </>
 );
  
 export default LoginScreen;

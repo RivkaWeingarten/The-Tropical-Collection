@@ -8,7 +8,7 @@ import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import logo from "../assets/logo-small.png";
 import SearchBox from "./SearchBox";
-import { SignedIn, SignedOut, SignOutButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignOutButton, UserButton } from "@clerk/clerk-react";
 
 
 const Header = () => {
@@ -82,14 +82,14 @@ const Header = () => {
                   {/* <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item> */}
-                   <SignOutButton>
-                <LinkContainer to="/">
-                  <Nav.Link>
-                    <FaUser />
+               
+                  <UserButton>
+                 
                     Sign Out
-                  </Nav.Link>
-                </LinkContainer>
-              </SignOutButton>
+                    </UserButton>
+                
+               
+        
                 </NavDropdown>
               </SignedIn>
              

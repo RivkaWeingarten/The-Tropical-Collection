@@ -7,7 +7,7 @@ import { deleteUser, registerUser } from "../controllers/userController.js";
 const router = express.Router();
 
 router.post(
-  "/webhooks",
+  "/",
   bodyParser.raw({ type: "application/json" }),
   async function (req, res) {
     // Check if the 'Signing Secret' from the Clerk Dashboard was correctly provided
