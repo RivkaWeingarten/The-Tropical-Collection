@@ -59,6 +59,7 @@ router.post(
     // Grab the ID and TYPE of the Webhook
     const eventType = evt?.type;
     if (eventType === "user.created" || eventType === "user.updated") {
+        console.log(`from backend ${eventType}` )
       const { id, first_name, last_name, email_addresses } = evt?.data;
       try {
         await registerUser(id, first_name, last_name, email_addresses);

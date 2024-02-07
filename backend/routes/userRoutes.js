@@ -5,7 +5,7 @@ const router =express.Router()
 import {protect, admin} from '../middleware/authMiddleware.js'
 import{
     //authUser,
-    registerUser,
+    // registerUser,
     logoutUser,
     getUserProfile,
     getUserById,
@@ -16,7 +16,7 @@ import{
 } from '../controllers/userController.js'
 //admin
 // router.route('/').post(registerUser).get(getUsers);
-router.post('/', registerUser)
+// router.post('/', registerUser)
 router.get('/', protect, admin, getUsers)
 router.post('/logout', logoutUser)
 //router.post('/auth', authUser)
