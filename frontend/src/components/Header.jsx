@@ -73,9 +73,9 @@ const Header = () => {
               )} */}
 
               <SignedIn>
-                <NavDropdown title={userInfo.firstName} id="username">
+                {/* <NavDropdown title={userInfo.firstName} id="username"> */}
 
-                {/* <NavDropdown title='placeholder' id="username"> */}
+                <NavDropdown title='placeholder' id="username">
                   <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
