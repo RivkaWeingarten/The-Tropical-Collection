@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
   "/webhooks",
-  bodyParser.raw({"application/json"}),
+  bodyParser.raw({type:"application/json"}),
   async function (req, res) {
     // Check if the 'Signing Secret' from the Clerk Dashboard was correctly provided
     const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
