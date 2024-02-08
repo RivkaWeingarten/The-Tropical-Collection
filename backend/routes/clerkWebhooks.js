@@ -103,7 +103,7 @@ router.post(
       switch (type) {
         case 'user.created':
         case 'user.updated':
-        case 'session.created':
+      
         
           const { id, first_name, last_name, email_addresses } = data;
           try {
@@ -127,6 +127,16 @@ router.post(
             res.status(500).json({ success: false, message: 'Error deleting user' });
           }
           break;
+          case 'session.created':
+            try {
+                // Handle user creation or update in your controller
+                
+                res.status(200).json({ success: true, message: 'Session created' });
+              } catch (err) {
+                console.error('Error session created:', err);
+                res.status(500).json({ success: false, message: 'session created unsucccessfully'  + type });
+              }
+              break;
 
         // Add more cases for other event types if needed
 
