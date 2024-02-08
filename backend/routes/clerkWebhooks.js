@@ -26,7 +26,7 @@ router.post(
             res.status(200).json({ success: true, message: 'User created or updated' });
           } catch (err) {
             console.error('Error creating or updating user:', err);
-            res.status(500).json({ success: false, message: 'Error creating or updating user '  + type });
+            res.status(500).json({ success: false, message: 'Error creating or updating user '  + type  + data.last_name});
           }
           break;
 
@@ -44,7 +44,8 @@ router.post(
           case 'session.created':
             try {
                 // Handle session creation or update in your controller
-            await authUser(user_id)
+                const { user_id: user_id } = data;
+            // await authUser(user_id)
                 res.status(200).json({ success: true, message: 'Session created' });
               } catch (err) {
                 console.error('Error session created:', err);
