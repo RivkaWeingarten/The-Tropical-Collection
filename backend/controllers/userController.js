@@ -62,30 +62,30 @@ import generateToken from "../utils/generateTokens.js";
 //   }
 // });
 
-const createAndUpdateUser=async(id, first_name, last_name, email_addresses) =>{
- try {
-  const user = await User.findOneAndUpdate(
-    {clerkId:id},
-    {
-   $set:{
-    firstName:first_name,
-    lastName: last_name,
-    email:email_addresses[0].email_address,
+// const createAndUpdateUser=async(id, first_name, last_name, email_addresses) =>{
+//  try {
+//   const user = await User.findOneAndUpdate(
+//     {clerkId:id},
+//     {
+//    $set:{
+//     firstName:first_name,
+//     lastName: last_name,
+//     email:email_addresses[0].email_address,
   
-  }
- },
- {usert: true, new:true}
-  )
-  await user.save()
-  return user
- } catch (error) {
-  res.status(400);
-  throw new Error("Invalid user data");
- }
+//   }
+//  },
+//  {usert: true, new:true}
+//   )
+//   await user.save()
+//   return user
+//  } catch (error) {
+//   res.status(400);
+//   throw new Error("Invalid user data");
+//  }
  
-}
+// }
 
-const registerUser = asyncHandler(async (req, res) => {
+const createAndUpdateUser = asyncHandler(async (req, res) => {
   const { id, first_name, last_name, email_addresses } = req.body;
 
   try {
