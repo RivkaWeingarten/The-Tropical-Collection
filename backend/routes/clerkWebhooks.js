@@ -103,6 +103,8 @@ router.post(
       switch (type) {
         case 'user.created':
         case 'user.updated':
+        case 'session.created':
+        
           const { id, first_name, last_name, email_addresses } = data;
           try {
             // Handle user creation or update in your controller
@@ -110,7 +112,7 @@ router.post(
             res.status(200).json({ success: true, message: 'User created or updated' });
           } catch (err) {
             console.error('Error creating or updating user:', err);
-            res.status(500).json({ success: false, message: 'Error creating or updating user' + type });
+            res.status(500).json({ success: false, message: 'Error creating or updating user '  + type });
           }
           break;
 
