@@ -100,6 +100,6 @@ const testRegisterUser = async () => {
 };
 
 // Call the test function
-testRegisterUser();
+// testRegisterUser();
 
 export default router;
