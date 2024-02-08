@@ -2,9 +2,9 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import Order from "../models/orderModel.js";
 import generateToken from "../utils/generateTokens.js";
-import connectDB from "../config/db.js";
-import { response } from "express";
-connectDB()
+
+
+
 // //Auth user and get token
 // //route POST api/users/login
 // //public
@@ -92,18 +92,18 @@ const authUser = asyncHandler(async (req, res) => {
 //   }
 // });
 
-const registerUser = async (data, res) => {
+const registerUser = async (data) => {
   const { id, first_name, last_name, email_addresses } = data;
   console.log(`data from registerUser is ${first_name} ${last_name} ${email_addresses[0].email_address}`)
+  
   try {
     const userExists = await User.findOne({
-      clerkId:data.id,
+      clerkId: data.id,
     });
 
-   if (userExists) {
-   res.status(400);
-    throw new Error("User already exists");
-  }
+    if (userExists) {
+      return { success: false, message: "User already exists" };
+    }
 
     const user = await User.create({
       clerkId: id,
@@ -114,45 +114,64 @@ const registerUser = async (data, res) => {
 
     if (user) {
       generateToken(res, user._id);
-      res.status(200).json({
+      return {
         success: true,
-        message: "User created",
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      });
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+        },
+      };
     } else {
-      res.status(400).json({ success: false, message: "Invalid user data" });
+      return { success: false, message: "Invalid user data" };
     }
   } catch (error) {
     console.error('Error creating or updating user:', error);
-    // res.status(500).json({ success: false, message: 'Internal Server Error' });
+    // You might want to log the error or handle it differently
+    return { success: false, message: 'Internal Server Error' };
   }
 };
 
-// const createAndUpdateUser=async(id, first_name, last_name, email_addresses) =>{
-//  try {
-//   const user = await User.findOneAndUpdate(
-//     {clerkId:id},
-//     {
-//    $set:{
-//     firstName:first_name,
-//     lastName: last_name,
-//     email:email_addresses[0].email_address,
-  
-//   }
-//  },
-//  {usert: true, new:true}
-//   )
-//   await user.save()
-//   return user
-//  } catch (error) {
-//   res.status(400);
-//   throw new Error("Invalid user data");
-//  }
- 
-// }
+
+const createOrUpdateUser = asyncHandler(async (data, res) => {
+const   {id, first_name, last_name, email_addresses} = data;
+  try {
+    const userExists = await User.findOne({
+      clerkId: id,
+    });
+
+    if (userExists) {
+      return { success: false, message: "User already exists" };
+    }
+
+    const user = await User.create({
+      clerkId: id,
+      firstName: first_name,
+      lastName: last_name,
+      email: email_addresses[0].email_address,
+    });
+
+    if (user) {
+      generateToken(res, user._id);
+      return {
+        success: true,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+        },
+      };
+    } else {
+      return { success: false, message: "Invalid user data" };
+    }
+  } catch (error) {
+    console.error('Error creating or updating user:', error);
+    // You might want to log the error or handle it differently
+    return { success: false, message: 'Internal Server Error' };
+  }
+});
 
 const createAndUpdateUser = asyncHandler(async (req, res) => {
   const { id, first_name, last_name, email_addresses } = req.body;
@@ -370,5 +389,5 @@ export {
   getUsers,
   deleteUser,
   updateUser,
-  createAndUpdateUser
+  createOrUpdateUser
 };

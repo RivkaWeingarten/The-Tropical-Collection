@@ -1,8 +1,8 @@
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import { registerUser, deleteUser, authUser,  } from '../controllers/userController.js';
-
+import { createOrUpdateUser, deleteUser, authUser,  registerUser  } from '../controllers/userController.js';
+import { response } from 'express';
 const router = express.Router();
 
 router.post(
@@ -17,13 +17,12 @@ router.post(
       switch (type) {
         case 'user.created':
         case 'user.updated':
-        
-      
+             
         
           const { id, first_name, last_name, email_addresses } = data;
           try {
             // Handle user creation or update in your controller
-            await registerUser(id, first_name, last_name, email_addresses);
+            await createOrUpdateUser(id, first_name, last_name, email_addresses, res);
             res.status(200).json({ success: true, message: 'User created or updated' });
           } catch (err) {
             console.error('Error creating or updating user:', err);
@@ -84,12 +83,16 @@ router.post(
 const testRegisterUser = async () => {
   try {
     const sampleData = {
-      id: 'sampleId',
-      first_name: 'Sample',
+      id: 'sampleId1',
+      first_name: 'Sample1',
       last_name: 'User',
-      email_addresses: [{ email_address: 'sample@example.com' }],
+      email_addresses: [{ email_address: 'sample1@example.com' }],
     };
-    await registerUser(sampleData);
+
+    const res = {
+      cookie: () => {},
+    };
+    await createOrUpdateUser(sampleData, res);
     console.log('User registration successful.');
   } catch (error) {
     console.error('Error registering user:', error);
@@ -97,6 +100,6 @@ const testRegisterUser = async () => {
 };
 
 // Call the test function
-// testRegisterUser();
+testRegisterUser();
 
 export default router;
