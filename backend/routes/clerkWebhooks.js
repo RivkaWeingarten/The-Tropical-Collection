@@ -2,14 +2,14 @@ import express from "express";
 import bodyParser from "body-parser";
 
 import { Webhook } from 'svix';
-// import clerkClient from '@clerk/clerk-sdk-node';
+import clerkClient from '@clerk/clerk-sdk-node';
 import { deleteUser, registerUser } from "../controllers/userController.js";
 
 const router = express.Router();
 
 router.post(
   "/webhooks",
-  bodyParser.raw({type:"application/json"}),
+  bodyParser.json(),
   async function (req, res) {
     // Check if the 'Signing Secret' from the Clerk Dashboard was correctly provided
     const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
