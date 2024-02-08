@@ -2,7 +2,9 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import Order from "../models/orderModel.js";
 import generateToken from "../utils/generateTokens.js";
-
+import connectDB from "../config/db.js";
+import { response } from "express";
+connectDB()
 // //Auth user and get token
 // //route POST api/users/login
 // //public
@@ -30,10 +32,38 @@ import generateToken from "../utils/generateTokens.js";
 //   }
 // });
 
+//Auth user and get token
+//route POST api/users/login
+//public
+const authUser = asyncHandler(async (req, res) => {
+  console.log(req.body);
+
+  const clerkId = req.body.user_id;
+
+  let user = await User.findOne({
+    clerkId: clerkId,
+  });
+
+  if (user) {
+    generateToken(res, user._id);
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+});
+
+
+
 // //Register user
 // //route POST api/users/
 // //public
-// const registerUser = asyncHandler(async (req, res) => {
+// const oldRegisterUser = asyncHandler(async (req, res) => {
 //   const { name, email, password } = req.body;
 //   const userExists = await User.findOne({
 //     email: new RegExp(`^${email}$`, "i"),
@@ -61,6 +91,45 @@ import generateToken from "../utils/generateTokens.js";
 //     throw new Error("Invalid user data");
 //   }
 // });
+
+const registerUser = async (data, res) => {
+  const { id, first_name, last_name, email_addresses } = data;
+  console.log(`data from registerUser is ${first_name} ${last_name} ${email_addresses[0].email_address}`)
+  try {
+    const userExists = await User.findOne({
+      clerkId:data.id,
+    });
+
+   if (userExists) {
+   res.status(400);
+    throw new Error("User already exists");
+  }
+
+    const user = await User.create({
+      clerkId: id,
+      firstName: first_name,
+      lastName: last_name,
+      email: email_addresses[0].email_address,
+    });
+
+    if (user) {
+      generateToken(res, user._id);
+      res.status(200).json({
+        success: true,
+        message: "User created",
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      });
+    } else {
+      res.status(400).json({ success: false, message: "Invalid user data" });
+    }
+  } catch (error) {
+    console.error('Error creating or updating user:', error);
+    // res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
 
 // const createAndUpdateUser=async(id, first_name, last_name, email_addresses) =>{
 //  try {
@@ -276,11 +345,11 @@ const updateUser = asyncHandler(async (req, res) => {
     user.email = req.body.email;
 
     // Hash the password if it's present in the request
-    if (req.body.password) {
-      // const saltRounds = 10;
-      // const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-      user.password = req.body.password;
-    }
+    // if (req.body.password) {
+    //   // const saltRounds = 10;
+    //   // const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+    //   user.password = req.body.password;
+    // }
 
     // Save the updated user
     const updatedUser = await user.save();
@@ -292,8 +361,8 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 export {
-  //authUser,
- 
+  authUser,
+  registerUser,
   logoutUser,
   getUserProfile,
   getUserById,

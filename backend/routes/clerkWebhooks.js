@@ -1,7 +1,7 @@
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import { createAndUpdateUser, deleteUser } from '../controllers/userController.js';
+import { registerUser, deleteUser, authUser,  } from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -17,12 +17,13 @@ router.post(
       switch (type) {
         case 'user.created':
         case 'user.updated':
+        
       
         
           const { id, first_name, last_name, email_addresses } = data;
           try {
             // Handle user creation or update in your controller
-            await createAndUpdateUser(id, first_name, last_name, email_addresses);
+            await registerUser(id, first_name, last_name, email_addresses);
             res.status(200).json({ success: true, message: 'User created or updated' });
           } catch (err) {
             console.error('Error creating or updating user:', err);
@@ -43,8 +44,8 @@ router.post(
           break;
           case 'session.created':
             try {
-                // Handle user creation or update in your controller
-                
+                // Handle session creation or update in your controller
+            await authUser(user_id)
                 res.status(200).json({ success: true, message: 'Session created' });
               } catch (err) {
                 console.error('Error session created:', err);
@@ -74,5 +75,28 @@ router.post(
     }
   }
 );
+
+
+// test.js
+
+
+
+const testRegisterUser = async () => {
+  try {
+    const sampleData = {
+      id: 'sampleId',
+      first_name: 'Sample',
+      last_name: 'User',
+      email_addresses: [{ email_address: 'sample@example.com' }],
+    };
+    await registerUser(sampleData);
+    console.log('User registration successful.');
+  } catch (error) {
+    console.error('Error registering user:', error);
+  }
+};
+
+// Call the test function
+// testRegisterUser();
 
 export default router;
