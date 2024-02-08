@@ -110,7 +110,7 @@ router.post(
             res.status(200).json({ success: true, message: 'User created or updated' });
           } catch (err) {
             console.error('Error creating or updating user:', err);
-            res.status(500).json({ success: false, message: 'Error creating or updating user' });
+            res.status(500).json({ success: false, message: 'Error creating or updating user' + type });
           }
           break;
 

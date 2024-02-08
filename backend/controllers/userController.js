@@ -62,60 +62,60 @@ import generateToken from "../utils/generateTokens.js";
 //   }
 // });
 
-// const createAndUpdateUser=async(id, first_name, last_name, email_addresses) =>{
-//  try {
-//   const user = await User.findOneAndUpdate(
-//     {clerkId:id},
-//     {
-//    $set:{
-//     firstName:first_name,
-//     lastName: last_name,
-//     email:email_addresses[0].email_address,
+const createAndUpdateUser=async(id, first_name, last_name, email_addresses) =>{
+ try {
+  const user = await User.findOneAndUpdate(
+    {clerkId:id},
+    {
+   $set:{
+    firstName:first_name,
+    lastName: last_name,
+    email:email_addresses[0].email_address,
   
-//   }
-//  },
-//  {usert: true, new:true}
-//   )
-//   await user.save()
-//   return user
-//  } catch (error) {
-//   res.status(400);
-//   throw new Error("Invalid user data");
-//  }
- 
-// }
-
-const createAndUpdateUser = asyncHandler(async (req, res) => {
-  const { id, first_name, last_name, email_addresses } = req.body;
-
-  try {
-    let user = await User.findOne({ clerkId: id });
-
-    if (!user) {
-      // If the user does not exist in your database, create a new user
-      user = await User.create({
-        clerkId: id,
-        firstName: first_name,
-        lastName: last_name,
-        email: email_addresses[0].email_address,
-      });
-    }
-
-    // Generate and send token
-    generateToken(res, user._id);
-
-    res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(400);
-    throw new Error("Invalid user data");
   }
-});
+ },
+ {usert: true, new:true}
+  )
+  await user.save()
+  return user
+ } catch (error) {
+  res.status(400);
+  throw new Error("Invalid user data");
+ }
+ 
+}
+
+// const createAndUpdateUser = asyncHandler(async (req, res) => {
+//   const { id, first_name, last_name, email_addresses } = req.body;
+
+//   try {
+//     let user = await User.findOne({ clerkId: id });
+
+//     if (!user) {
+//       // If the user does not exist in your database, create a new user
+//       user = await User.create({
+//         clerkId: id,
+//         firstName: first_name,
+//         lastName: last_name,
+//         email: email_addresses[0].email_address,
+//       });
+//     }
+
+//     // Generate and send token
+//     generateToken(res, user._id);
+
+//     res.status(200).json({
+//       _id: user._id,
+//       name: user.name,
+//       email: user.email,
+//       isAdmin: user.isAdmin,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(400);
+//     throw new Error("Invalid user data");
+//   }
+// });
 
 
 // //Logout user and clear cookie
