@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-// import { Webhook } from '@clerk/clerk-sdk-node';
+
+import { Webhook } from 'svix';
 // import clerkClient from '@clerk/clerk-sdk-node';
 import { deleteUser, registerUser } from "../controllers/userController.js";
 
