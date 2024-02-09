@@ -166,7 +166,8 @@ router.post(
           const { id, first_name, last_name, email_addresses } = data;
           try {
             // Handle user creation or update in your controller
-            await createOrUpdateUser(id, first_name, last_name, email_addresses, res);
+           const result= await createOrUpdateUser({id, first_name, last_name, email_addresses}, res);
+            console.log(result)
             res.status(200).json({ success: true, message: 'User created or updated ' + last_name + ' ' + first_name });
           } catch (err) {
             console.error('Error creating or updating user:', err);
