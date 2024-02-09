@@ -206,10 +206,10 @@ router.post(
           break;
 
           case "session.created":
-            const { id: user_id } = data;
+            
+            const { user_id: user_id } = data;
             try {
-              // Handle user deletion in your controller
-             ;
+       
               res.status(200).json({ success: true, message: "session started" + user_id });
             } catch (err) {
               console.error("Error with session created:", err);
