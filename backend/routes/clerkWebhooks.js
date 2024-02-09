@@ -129,12 +129,11 @@ router.post(
     if (!svix_id || !svix_timestamp || !svix_signature) {
       return res.status(400).json({ success: false, message: 'Missing svix headers' });
     }
-
-    const payload = req.body;
+    const { type, data } = req.body;
 
     const wh = new Webhook(WEBHOOK_SECRET);
 
-    let evt;
+
 
     // try {
     //   evt = wh.verify(payload, {
@@ -149,7 +148,7 @@ router.post(
 
     const eventType = evt?.type;
 
-    if (eventType === 'user.created' || eventType === 'user.updated') {
+    if (type === 'user.created' || type === 'user.updated') {
       const { id, first_name, last_name, email_addresses } = evt?.data;
 
       try {
@@ -162,7 +161,7 @@ router.post(
       }
     }
 
-    if (eventType === 'user.deleted') {
+    if (type === 'user.deleted') {
       try {
         const { id } = evt?.data;
         await deleteUser(id);
