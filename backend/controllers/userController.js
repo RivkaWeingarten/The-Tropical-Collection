@@ -134,7 +134,7 @@ const registerUser = async (data) => {
 };
 
 
-const createOrUpdateUser = asyncHandler(async (data) => {
+const createOrUpdateUser = asyncHandler(async (data, res) => {
 const   {id, first_name, last_name, email_addresses} = data;
   try {
     const userExists = await User.findOne({
@@ -152,21 +152,21 @@ const   {id, first_name, last_name, email_addresses} = data;
       email: email_addresses[0].email_address,
     });
 
-    // if (user) {
-    //   generateToken(res, user._id);
-    //   return {
-    //     success: true,
-    //     user: {
-    //       _id: user._id,
-    //       name: user.name,
-    //       email: user.email,
-    //       isAdmin: user.isAdmin,
-    //     },
-    //   };
-    // } else {
-    //   return { success: false, message: "Invalid user data" };
-    // }
-    user.save()
+    if (user) {
+      generateToken(res, user._id);
+      return {
+        success: true,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+        },
+      };
+    } else {
+      return { success: false, message: "Invalid user data" };
+    }
+  
   } catch (error) {
     console.error('Error creating or updating user:', error);
     // You might want to log the error or handle it differently
