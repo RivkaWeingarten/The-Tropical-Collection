@@ -136,16 +136,16 @@ router.post(
 
     let evt;
 
-    try {
-      evt = wh.verify(payload, {
-        'svix-id': svix_id,
-        'svix-timestamp': svix_timestamp,
-        'svix-signature': svix_signature,
-      });
-    } catch (err) {
-      console.error('Error verifying webhook:', err);
-      return res.status(400).json({ success: false, message: 'Error verifying webhook' });
-    }
+    // try {
+    //   evt = wh.verify(payload, {
+    //     'svix-id': svix_id,
+    //     'svix-timestamp': svix_timestamp,
+    //     'svix-signature': svix_signature,
+    //   });
+    // } catch (err) {
+    //   console.error('Error verifying webhook:', err);
+    //   return res.status(400).json({ success: false, message: 'Error verifying webhook' });
+    // }
 
     const eventType = evt?.type;
 
