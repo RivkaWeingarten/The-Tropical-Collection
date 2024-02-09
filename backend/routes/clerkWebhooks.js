@@ -1,4 +1,3 @@
-
 // import express from 'express';
 // import bodyParser from 'body-parser';
 // import { createOrUpdateUser, deleteUser, authUser,  registerUser  } from '../controllers/userController.js';
@@ -17,8 +16,7 @@
 //       switch (type) {
 //         case 'user.created':
 //         case 'user.updated':
-             
-        
+
 //           const { id, first_name, last_name, email_addresses } = data;
 //           try {
 //             // Handle user creation or update in your controller
@@ -29,8 +27,6 @@
 //             res.status(500).json({ success: false, message: 'Error creating or updating user '  + type  + ' ' + last_name});
 //           }
 //           break;
-
-   
 
 //         case 'user.deleted':
 //           const { id: deletedUserId } = data;
@@ -58,7 +54,7 @@
 //               case 'session.ended':
 //                 try {
 //                     // Handle user creation or update in your controller
-                    
+
 //                     res.status(200).json({ success: true, message: 'Session ended' });
 //                   } catch (err) {
 //                     console.error('Error session ended:', err);
@@ -78,10 +74,7 @@
 //   }
 // );
 
-
 // // test.js
-
-
 
 // const testRegisterUser = async () => {
 //   try {
@@ -107,15 +100,19 @@
 
 // export default router;
 
-import express from 'express';
-import bodyParser from 'body-parser';
-import { createOrUpdateUser, deleteUser, authUser } from '../controllers/userController.js';
-import { Webhook } from 'svix';
+import express from "express";
+import bodyParser from "body-parser";
+import {
+  createOrUpdateUser,
+  deleteUser,
+  authUser,
+} from "../controllers/userController.js";
+import { Webhook } from "svix";
 
 const router = express.Router();
 
 router.post(
-  '/webhooks',
+  "/webhooks",
   bodyParser.json(), // Parse JSON payload
   async function (req, res) {
     try {
@@ -123,20 +120,22 @@ router.post(
       const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
       if (!WEBHOOK_SECRET) {
-        throw new Error('You need a WEBHOOK_SECRET in your .env');
+        throw new Error("You need a WEBHOOK_SECRET in your .env");
       }
 
       // Extract necessary properties from the Clerk webhook payload
       const { type, data } = req.body;
 
       // Get the headers
-      const svix_id = req.get('svix-id');
-      const svix_timestamp = req.get('svix-timestamp');
-      const svix_signature = req.get('svix-signature');
+      const svix_id = req.get("svix-id");
+      const svix_timestamp = req.get("svix-timestamp");
+      const svix_signature = req.get("svix-signature");
 
       // If there are missing Svix headers, error out
       if (!svix_id || !svix_timestamp || !svix_signature) {
-        return res.status(400).json({ success: false, message: 'Missing Svix headers' });
+        return res
+          .status(400)
+          .json({ success: false, message: "Missing Svix headers" });
       }
 
       // Get the body
@@ -150,49 +149,85 @@ router.post(
       // Verify the payload with the headers
       try {
         evt = wh.verify(body, {
-          'svix-id': svix_id,
-          'svix-timestamp': svix_timestamp,
-          'svix-signature': svix_signature,
+          "svix-id": svix_id,
+          "svix-timestamp": svix_timestamp,
+          "svix-signature": svix_signature,
         });
       } catch (err) {
-        console.error('Error verifying webhook:', err);
-        return res.status(400).json({ success: false, message: 'Error verifying webhook' });
+        console.error("Error verifying webhook:", err);
+        return res
+          .status(400)
+          .json({ success: false, message: "Error verifying webhook" });
       }
 
       // Handle different event types
       switch (type) {
-        case 'user.created':
-        case 'user.updated':
+        case "user.created":
+        case "user.updated":
           const { id, first_name, last_name, email_addresses } = data;
           try {
             // Handle user creation or update in your controller
-           const result= await createOrUpdateUser({id, first_name, last_name, email_addresses}, res);
-            console.log(result)
-            res.status(200).json({ success: true, message: 'User created or updated ' + last_name + ' ' + first_name });
+            const result = await createOrUpdateUser(
+              { id, first_name, last_name, email_addresses },
+              res
+            );
+            console.log(result);
+            res
+              .status(200)
+              .json({
+                success: true,
+                message:
+                  "User created or updated " + last_name + " " + first_name,
+              });
           } catch (err) {
-            console.error('Error creating or updating user:', err);
-            res.status(500).json({ success: false, message: 'Error creating or updating user ' + type + ' ' + last_name });
+            console.error("Error creating or updating user:", err);
+            res
+              .status(500)
+              .json({
+                success: false,
+                message:
+                  "Error creating or updating user " + type + " " + last_name,
+              });
           }
           break;
 
-          case 'user.deleted':
-                      const { id: deletedUserId } = data;
-                      try {
-                        // Handle user deletion in your controller
-                        await deleteUser(deletedUserId);
-                        res.status(200).json({ success: true, message: 'User deleted' });
-                      } catch (err) {
-                        console.error('Error deleting user:', err);
-                        res.status(500).json({ success: false, message: 'Error deleting user' });
-                      }
-                      break;
+        case "user.deleted":
+          const { id: deletedUserId } = data;
+          try {
+            // Handle user deletion in your controller
+            await deleteUser(deletedUserId);
+            res.status(200).json({ success: true, message: "User deleted" });
+          } catch (err) {
+            console.error("Error deleting user:", err);
+            res
+              .status(500)
+              .json({ success: false, message: "Error deleting user" });
+          }
+          break;
 
+          case "session.created":
+            const { id: user_id } = data;
+            try {
+              // Handle user deletion in your controller
+             ;
+              res.status(200).json({ success: true, message: "session started" + user_id });
+            } catch (err) {
+              console.error("Error with session created:", err);
+              res
+                .status(500)
+                .json({ success: false, message: "Error session created" });
+            }
+            break;
         default:
-          res.status(400).json({ success: false, message: 'Unsupported event type' });
+          res
+            .status(400)
+            .json({ success: false, message: "Unsupported event type" });
       }
     } catch (error) {
-      console.error('Error handling webhook:', error);
-      res.status(500).json({ success: false, message: 'Internal server error' });
+      console.error("Error handling webhook:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
     }
   }
 );
