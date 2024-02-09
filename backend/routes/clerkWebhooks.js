@@ -149,7 +149,7 @@ router.post(
     const eventType = evt?.type;
 
     if (type === 'user.created' || type === 'user.updated') {
-      const { id, first_name, last_name, email_addresses } = evt?.data;
+      const { id, first_name, last_name, email_addresses } = data;
 
       try {
         await createOrUpdateUser(id, first_name, last_name, email_addresses, res);
@@ -163,7 +163,7 @@ router.post(
 
     if (type === 'user.deleted') {
       try {
-        const { id } = evt?.data;
+        const { id } = data;
         await deleteUser(id);
 
         return res.status(200).json({ success: true, message: 'User is deleted' });
