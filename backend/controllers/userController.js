@@ -331,7 +331,7 @@ const getUsers = asyncHandler(async (req, res) => {
 //using clerk
 
 const deleteUser = asyncHandler(async (id) => {
-   const user =  await User.findById({clerkId:id});
+   const user =  await User.find({clerkId:id});
     if (user) {
      if (user.isAdmin) {
       res.status(400);
