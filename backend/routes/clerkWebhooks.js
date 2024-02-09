@@ -175,7 +175,17 @@ router.post(
           }
           break;
 
-        // Handle other cases
+          case 'user.deleted':
+                      const { id: deletedUserId } = data;
+                      try {
+                        // Handle user deletion in your controller
+                        await deleteUser(deletedUserId);
+                        res.status(200).json({ success: true, message: 'User deleted' });
+                      } catch (err) {
+                        console.error('Error deleting user:', err);
+                        res.status(500).json({ success: false, message: 'Error deleting user' });
+                      }
+                      break;
 
         default:
           res.status(400).json({ success: false, message: 'Unsupported event type' });
