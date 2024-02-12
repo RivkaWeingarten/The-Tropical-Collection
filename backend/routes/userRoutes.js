@@ -20,9 +20,9 @@ import{
 router.get('/', protect, admin, getUsers)
 router.post('/logout', logoutUser)
 //router.post('/auth', authUser)
-router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile)
+router.route('/profile').get( getUserProfile).put(protect, updateUserProfile)
 router.delete('/:id', protect, admin, deleteUser)
-router.get('/:id', protect, admin,  getUserById)
+router.get('/:id',    getUserById)
 router.put ('/:id', protect, admin,  updateUser)
 
 export default router

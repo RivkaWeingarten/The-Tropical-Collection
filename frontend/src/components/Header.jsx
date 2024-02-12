@@ -4,21 +4,28 @@ import { Badge, Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useLogoutMutation } from "../slices/usersApiSlice";
+import { useLogoutMutation, useGetUserDetailsQuery } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import logo from "../assets/logo-small.png";
 import SearchBox from "./SearchBox";
-import { SignedIn, SignedOut, SignOutButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignOutButton, UserButton, useUser } from "@clerk/clerk-react";
 
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { userInfo } = useSelector((state) => state.auth);
+  // const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { user, isLoaded } = useUser();
   const [logoutApiCall] = useLogoutMutation();
+  const {
+    data: userInfo,
+    isLoading,
+    refetch,
+    error,
+  } = useGetUserDetailsQuery(user?.id);
+
 
   // async function logoutHandler() {
   //   try {
@@ -75,7 +82,7 @@ const Header = () => {
               <SignedIn>
                 {/* <NavDropdown title={userInfo.firstName} id="username"> */}
 
-                <NavDropdown title='placeholder' id="username">
+                <NavDropdown title={userInfo?.firstName} id="username">
                   <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>

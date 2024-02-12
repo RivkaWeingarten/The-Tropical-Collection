@@ -36,9 +36,11 @@ import ProductListScreen from "./screens/admin/ProductListScreen";
 import ProductEditScreen from "./screens/admin/ProductEditScreen";
 import UserListScreen from "./screens/admin/UserListScreen";
 import UserEditScreen from "./screens/admin/UserEditScreen1";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+    
       <Route path="/" element={<HomeScreen />} />
 
       <Route path="/products/page/:pageNumber" element={<ProductScreen />} />
@@ -50,7 +52,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="*" element={<ErrorScreen />}></Route>
-
+   
       <Route path="" element={<PrivateRoute />}>
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
@@ -69,6 +71,7 @@ const router = createBrowserRouter(
         <Route path='/admin/user/:id/edit' element ={<UserEditScreen />}/>
         <Route path='admin/user/:id' element ={<ProfileScreen/>} />
       </Route>
+     
     </Route>
   )
 );

@@ -1,11 +1,11 @@
-import React from 'react'
-
-import {Outlet, Navigate} from 'react-router-dom'
-import { UseSelector, useSelector } from 'react-redux'
+import React from 'react';
+import { Outlet, Navigate } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
 
 function PrivateRoute() {
-    const {userInfo} = useSelector(state => state.auth)
-  return userInfo ? <Outlet /> : <Navigate to ="login" replace/>
+  const { signedIn } = useUser();
+
+  return signedIn ? <Outlet /> : <Navigate to="login" replace />;
 }
 
-export default PrivateRoute
+export default PrivateRoute;

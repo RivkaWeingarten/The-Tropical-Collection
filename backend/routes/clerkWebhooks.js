@@ -206,8 +206,8 @@ router.post(
           break;
 
           case "session.created":
-            
-            const { user_id: user_id } = data;
+
+            const { id: user_id } = data;
             try {
        
               res.status(200).json({ success: true, message: "session started" + user_id });
